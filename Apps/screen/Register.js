@@ -10,6 +10,8 @@ import {
   View,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {ScrollView} from 'react-native-gesture-handler';
 import {Header} from '../Components/Header';
 import styles from './style';
@@ -30,7 +32,7 @@ export class Register extends Component {
       isFnNamevalidate: '',
       isLnNamevalidate: '',
       nameError: '',
-
+      country:'',
       email: '',
       mobileNo: '',
       emailError: '',
@@ -49,37 +51,14 @@ export class Register extends Component {
     };
   }
 
-  // setFirstName = (text) => {
-  //   this.setState({
-  //     firstName: text,
-  //   });
-  //   // console.log(this.state.firstName)
-  // };
-  // setLastName = (text) => {
-  //   this.setState({
-  //     lastName: text,
-  //   });
-  // };
-  // setEmail = (text) => {
-  //   this.setState({
-  //     email: text,
-  //   });
-  // };
-  // setMobileNo = (text) => {
-  //   this.setState({
-  //     mobileNo: text,
-  //   });
-  // };
-  // setPassword = (text) => {
-  //   this.setState({
-  //     password: text,
-  //   });
-  // };
-  // setCPassword = (text) => {
-  //   this.setState({
-  //     cpassword: text,
-  //   });
-  // };
+  // setDataToAsyncStorage(){
+  //   registered_data={firstName:this.state.firstName,lastName:this.state.lastName,
+  //     email:this.state.email,mobileNo:this.state.mobileNo,password:this.state.password};
+  //   AsyncStorage.setItem('registered_data',JSON.stringify(registered_data))
+  //   alert('Registered Successfully!',registered_data)
+  //   this.props.navigation.navigate('SignIn');
+  // }
+
   handleEventsBaar = () => {
     if (
       this.state.firstName == '' ||
@@ -94,19 +73,17 @@ export class Register extends Component {
         errorIcon: 'alert-circle-outline',
       });
       Alert.alert('Please fill all marked Field Properly');
-    }else if(
-      this.state.isFnNamevalidate == true ||
-      this.state.isLnNamevalidate == true ||
-      this.state.isEmailvalidate == true ||
-      this.state.isMobileValidate == true ||
-      this.state.isPasswordvalidate == true ||
-      this.state.isCPasswordvalidate == true
-    ){
-      alert('Registered Successfully!')
-      this.props.navigation.navigate('SignIn');
     }
-     
     else {
+    if(
+      this.state.isFnNamevalidate == false ||
+      this.state.isLnNamevalidate == false ||
+      this.state.isEmailvalidate == false ||
+      this.state.isMobileValidate == false ||
+      this.state.isPasswordvalidate == false ||
+      this.state.isCPasswordvalidate == false
+    ){
+      // this.setDataToAsyncStorage()
       validateFirstName(this.state.firstName);
       validateLastName(this.state.lastName);
       validateEmail(this.state.email);
@@ -120,16 +97,29 @@ export class Register extends Component {
         });
       }
     }
-    
+     
+    else {
+      registered_data={firstName:this.state.firstName,lastName:this.state.lastName,
+        email:this.state.email,mobileNo:this.state.mobileNo,password:this.state.password};
+      AsyncStorage.setItem('registered_data',JSON.stringify(registered_data))
+      alert('Registered Successfully!',registered_data)
+      console.log("registered_data from register:",registered_data);
+
+      this.props.navigation.navigate('SignIn');
+     
+     
+      
+    }
+  }
 
   };
 
   render(props) {
     validateEmail = (text) => {
-      console.log(text);
+      // console.log(text);
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       if (reg.test(text) === false) {
-        console.log('Email is Not Correct');
+        // console.log('Email is Not Correct');
         this.setState({
           email: text,
           emailError: 'Email Must be In proper format',
@@ -138,20 +128,20 @@ export class Register extends Component {
         // console.log('Email is not Correct',this.state.email,'---',text);
         return false;
       } else {
-        console.log('tetextxt==', text);
+        // console.log('tetextxt==', text);
         this.setState({
           email: text,
           emailError: '',//valid Email',
           isEmailvalidate: true,
         });
-        console.log('Email is Correct', this.state.email, '---');
+        // console.log('Email is Correct', this.state.email, '---');
       }
     };
     validateFirstName = (text) => {
-      console.log(text);
+      // console.log(text);
       let reg = /^[a-zA-Z]*$/;
       if (reg.test(text) === false) {
-        console.log('Name only contain alphabets');
+        // console.log('Name only contain alphabets');
         this.setState({
           firstName: text,
           fnError: 'only alphabets allowed',
@@ -162,15 +152,15 @@ export class Register extends Component {
       } else {
         if (text != '') {
           //text.length >= 3 && text.length <= 15
-          console.log('text==', text);
+          // console.log('text==', text);
           this.setState({
             firstName: text,
             fnError: '',//'Valid Name',
             isFnNamevalidate: true,
           });
-          console.log('Name is Correct', this.state.firstName, '---');
+          // console.log('Name is Correct', this.state.firstName, '---');
         } else {
-          console.log('Name must be in between 3 to 15 characters');
+          // console.log('Name must be in between 3 to 15 characters');
           this.setState({
             firstName: text,
             fnError: 'First Name Required', //'Name must be in between 3 to 15 characters',
@@ -180,7 +170,7 @@ export class Register extends Component {
       }
     };
     validateLastName = (text) => {
-      console.log(text);
+      // console.log(text);
       let reg = /^[a-zA-Z]*$/;
       if (reg.test(text) === false) {
         console.log('Name only contain alphabets');
@@ -194,15 +184,15 @@ export class Register extends Component {
       } else {
         if (text != '') {
           //text.length >= 3 && text.length <= 15
-          console.log('text==', text);
+          // console.log('text==', text);
           this.setState({
             lastName: text,
             lnError: '',//'Valid Name',
             isLnNamevalidate: true,
           });
-          console.log('Name is Correct', this.state.lastName, '---');
+          // console.log('Name is Correct', this.state.lastName, '---');
         } else {
-          console.log('Name must be in between 3 to 15 characters');
+          // console.log('Name must be in between 3 to 15 characters');
           this.setState({
             lastName: text,
             lnError: 'Last Name required', //'Name must be in between 3 to 15 characters',
@@ -212,10 +202,10 @@ export class Register extends Component {
       }
     };
     validateMobile = (text) => {
-      console.log(text);
+      // console.log(text);
       const reg = /^[0]?[789]\d{9}$/;
       if (reg.test(parseInt(text)) === false) {
-        console.log('Mobile no. is Not Correct');
+        // console.log('Mobile no. is Not Correct');
         this.setState({
           phone: text,
           phoneError:
@@ -230,14 +220,14 @@ export class Register extends Component {
           phoneError: '',//'Valid Mobile Number',
           isMobileValidate: true,
         });
-        console.log('Mobile No is Correct', this.state.mobileNo);
+        // console.log('Mobile No is Correct', this.state.mobileNo);
       }
     };
     validatePassword = (text) => {
-      console.log(text);
+      // console.log(text);
       let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/;
       if (reg.test(text) === false) {
-        console.log('Password Not Valid');
+        // console.log('Password Not Valid');
         this.setState({
           password: text,
           passwordError:
@@ -246,20 +236,20 @@ export class Register extends Component {
         });
         return false;
       } else {
-        console.log('text==', text);
+        // console.log('text==', text);
         this.setState({
           password: text,
           passwordError: '',//'Valid Password',
           isPasswordvalidate: true,
         });
-        console.log('Password is Correct', text, '---');
+        // console.log('Password is Correct', text, '---');
       }
     };
     checkPassword = (text) => {
       if (this.state.password === text) {
         this.setState({
           cpassword: text,
-          cpasswordError: 'Password matched',
+          cpasswordError: '',//'Password matched',
           isCPasswordvalidate: true,
         });
         return false;
@@ -361,17 +351,17 @@ export class Register extends Component {
                   <Text style={styles.errorMsg}>{this.state.phoneError}</Text>
                 )}
                 {/* <InputContainer iconName='flag' placeholder='Select Country'/> */}
-                <View style={style1.inputContainer}>
+                {/* <View style={style1.inputContainer}>
                   <Icon
                     name="flag" //"person-outline"
                     color="#000"
                     size={20}
                     style={style1.inputIcon}
                   />
-                  <Picker style={style1.picker}>
-                    {/* <Picker.Item></Picker.Item> */}
+                  <Picker style={style1.picker}  onSelect={(country) => this.setState({country:country})}>
+                    {/* <Picker.Item></Picker.Item> 
                   </Picker>
-                </View>
+                </View> */}
                 <InputContainer
                   iconName="lock"
                   errorIcon={this.state.errorIcon}

@@ -1,26 +1,47 @@
 import React from "react";
 import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet,View, Text, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DATA = [
     {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
+      id: "1",
+      title: "C",
+      year:"",
+      logo:require('../assets/images/user1.png'),
     },
     {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
+      id: "2",
+      title: "C++",
+      logo:require('../assets/images/user1.png'),
+
     },
     {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
+      id: "3",
+      title: "Java",
+      logo:require('../assets/images/user1.png'),
+
     },
+    {
+      id: "4",
+      title: "JavaScript",
+      logo:require('../assets/images/user1.png'),
+    },
+    {
+      id: "5",
+      title: "Python",
+      logo:require('../assets/images/user1.png'),
+
+    },
+    
   ];
 
-const Item = ({ item, onPress, style }) => (
+const Item = ({ item,onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
     <View style={styles.detailList}>
-    <Image source={require('../assets/images/MahindraJeeto.jpg')} style={styles.imgStyle}/>
+    <Image source={item.logo} style={styles.imgStyle}/>
     <Text style={styles.title}>{item.title}</Text>
+    <Icon name='chevron-right' size={40} style={styles.rightIcon}/>
     </View>
    
   </TouchableOpacity>
@@ -35,17 +56,30 @@ export class Home extends React.Component {
          selectedId:''
         };
       }
-    render(){
+  
+    //   componentDidMount(){
+    //     console.log("registered_data from auth did mount:",registered_data);
+
+    //   async()=>{
+    //   let registered_data = await AsyncStorage.getItem('registered_data');
+    //   let parsed = JSON.parse(registered_data);
+  
+    // console.log("email:",parsed.email,"--password:",parsed.password);}
+    
+    //   }
+    render(props){
+    // console.log("email:",parsed.email,"--password:",parsed.password);
+      
   
         // const [selectedId, setSelectedId] = useState(null);
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === this.selectedId ? "#edffec" : "#709fb0";
+    const backgroundColor = item.id === this.selectedId ? "#edffec" : "#f9f3f3";
 
     return (
       <Item
         item={item}
-        onPress={() => this.setState({selectedId:item.id})}
+        onPress={ ()=>this.props.navigation.navigate('Detailed')}
         style={{ backgroundColor }}
       />
     );
@@ -59,6 +93,9 @@ export class Home extends React.Component {
         keyExtractor={(item) => item.id}
         extraData={this.selectedId}
       />
+      <View>
+        
+      </View>
     </SafeAreaView>
   );}
 };
@@ -71,19 +108,34 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
     marginVertical: 8,
-    // marginHorizontal: 16,
+    // borderWidth:1,
+    borderColor:'#00587a',
+    marginHorizontal: 16,
+  shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 2,
+},
+shadowOpacity: 0.25,
+shadowRadius: 3.84,
+
+elevation: 5,
+   
   },
   title: {
     fontSize: 32,
-    marginLeft:30
+    marginLeft:30,
+    marginTop:20
   },
   detailList:{
-      flexDirection:'row'
+      flexDirection:'row',
+     
   },
   imgStyle:{
-      height:50,
+      height:80,
       width:80,
-  }
+  },
+  rightIcon:{marginTop:23,position:'absolute',right:0}
 });
 
 export default Home;
