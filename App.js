@@ -8,6 +8,7 @@ import Home from './Apps/screen/Home';
 import SplashScreen from './Apps/screen/SplashScreen';
 
 import Auth from './Apps/Authentication/Auth'
+import Detailed from "./Apps/screen/Detailed";
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,8 @@ const App = () => {
         {/* <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/> */}
         <Stack.Screen name='SignIn' component={SignIn} options={{headerShown: false}}/>
         <Stack.Screen name='Register' component={Register} options={{headerShown: false}}/>
-        <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Home' component={Home} options={{headerShown: false}}/>
+        <Stack.Screen name='Detailed' component={Detailed} options={{headerShown: false}}/>
         <Stack.Screen name='Auth' component={Auth} />
 
       </Stack.Navigator>
